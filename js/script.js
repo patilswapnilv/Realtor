@@ -11,6 +11,29 @@
     }
   });
 
+    jQuery('#agent-form').submit(ajaxSubmit);
+
+    function ajaxSubmit(){
+
+    var newCustomerForm = jQuery(this).serialize();
+
+    jQuery('#single-property-form-submit-button').hide();
+    jQuery('.loading-button').show();
+
+    jQuery.ajax({
+    type:"POST",
+    url: my_ajax_vars.ajaxurl,
+    data: newCustomerForm,
+    success:function(data){
+      jQuery("#feedback").html(data);
+      jQuery('#single-property-form-submit-button').show();
+      jQuery('.loading-button').hide();
+
+    }
+    });
+
+    return false;
+    }
 
 
 

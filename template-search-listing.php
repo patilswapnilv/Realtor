@@ -1,8 +1,8 @@
 <?php
  /*
- * Template Name: Property Listing
+ * Template Name: Property Search
  *
- * Property Listing Template
+ * Property Search Template
  *
  */
 get_header();
@@ -36,7 +36,7 @@ get_header();
     <section class="section-inner">
       <div class="container">
         <div class="row">
-          <?php get_template_part("template-parts/property-sidebar"); ?>
+          <?php get_template_part("template-parts/property-search-sidebar"); ?>
           <div class="col-sm-8">
             <div class="row">
               <?php

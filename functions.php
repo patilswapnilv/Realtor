@@ -24,6 +24,7 @@ add_image_size( 'realtor_blog_thumbnail', 648, 409,true );
 add_image_size( 'realtor_single_blog_thumbnail', 773, 430,true );
 add_image_size( 'realtor_related_posts_thumbnail', 372, 247,true );
 add_image_size( 'realtor_property_single', 773, 374,true );
+add_image_size( 'realtor_property_thumb', 369, 202,true );
 add_image_size( 'realtor_attachments', 800 );
 
 //TGM Plugin Activation
@@ -54,7 +55,6 @@ function realtor_register_required_plugins() {
 
 	tgmpa( $plugins, $config );
 }
-
 
 //For Loading Theme Styles
 
@@ -118,12 +118,6 @@ if ( ! function_exists( 'realtor_enqueue_theme_styles' ) ) {
 	add_action( 'wp_enqueue_scripts', 'realtor_enqueue_theme_styles' );
 }
 
-// //Filtering the enqued less style sheet with stylesheet/less
-// function poporealator_stylesheet_less( $tag ) {
-//     return preg_replace( "/='stylesheet' id='Color-LESS-css'/", "='stylesheet/less' id='Color-LESS-css'", $tag );
-// }
-// add_filter( 'style_loader_tag', 'make_stylesheet_less' );
-
 //For Loading Theme Scripts
 
 if ( ! function_exists( 'realtor_enqueue_theme_scripts' ) ) {
@@ -135,9 +129,6 @@ if ( ! function_exists( 'realtor_enqueue_theme_scripts' ) ) {
 
 			//jQuery
 			wp_enqueue_script('jquery');
-
-			// //Custom jQuery
-			// wp_enqueue_script( 'custom-jquery', get_template_directory_uri().'/js/jquery.min.js'); 
 
 			//Bootstrap
 			wp_enqueue_script( 'bootstrap', get_template_directory_uri().'/js/bootstrap.min.js'); 
@@ -157,11 +148,6 @@ if ( ! function_exists( 'realtor_enqueue_theme_scripts' ) ) {
 			//jQuery Scroll To
 			wp_enqueue_script( 'jquery-scroll-to', get_template_directory_uri().'/js/jquery.scrollTo-1.4.2-min.js'); 
 
-			//jQuery Parallax
-			//wp_enqueue_script( 'jquery-parallax', get_template_directory_uri().'/js/jquery.parallax.js'); 
-
-			//jQuery Parallax 2
-			//wp_enqueue_script( 'jquery-parallax-2', get_template_directory_uri().'/js/jquery.parallax-1.1.3.js'); 
 
 			//Owl Carousel
 			wp_enqueue_script( 'owl-carousel', get_template_directory_uri().'/js/owl.carousel.js'); 
@@ -169,8 +155,42 @@ if ( ! function_exists( 'realtor_enqueue_theme_scripts' ) ) {
 			//Bootstrap Select
 			wp_enqueue_script( 'bootstrap-select', get_template_directory_uri().'/js/bootstrap-select.min.js'); 
 
+			//Google Captcha
+			wp_enqueue_script( 'google-captcha', 'https://www.google.com/recaptcha/api.js');
+
 			//Custom
-			wp_enqueue_script( 'custom', get_template_directory_uri().'/js/script.js'); 
+			wp_register_script( 'custom', get_template_directory_uri().'/js/script.js' );
+			wp_localize_script('custom','my_ajax_vars', array(
+			    				'ajaxurl'       => admin_url( 'admin-ajax.php' )
+			));
+			wp_enqueue_script( 'custom');
+
+			//Google Maps
+			wp_enqueue_script('google-maps',"$protocol://maps.googleapis.com/maps/api/js?key=AIzaSyBQs6Z-1uzgEy7UFKrNjOK8eCCKHiTSHAs&callback=initMap");
+
+			//Localizing Scripts
+
+			// Register the script
+			wp_register_script( 'realtor-maps', get_template_directory_uri().'/js/realtor_map_scripts.js' );
+
+			// Localize the script with new data
+			if(is_singular( 'property' ))
+			{
+				$translation_array = array(
+					'location' => get_post_meta(get_the_id(),'address-map',true)
+					);
+			}
+			else
+			{
+				$translation_array = array(
+					'location' => 'none'
+					);
+			}
+			
+			wp_localize_script( 'realtor-maps', 'single_property_loc', $translation_array );
+
+			// Enqueued script with localized data.
+			wp_enqueue_script( 'realtor-maps' );
 			
 
 
@@ -178,6 +198,18 @@ if ( ! function_exists( 'realtor_enqueue_theme_scripts' ) ) {
 	}
 	add_action( 'wp_enqueue_scripts', 'realtor_enqueue_theme_scripts' );
 }
+//Add Script Attributes
+function add_async_attribute($tag, $handle) {
+    if ( 'google-maps' !== $handle )
+        return $tag;
+    return str_replace( ' src', ' async="async" src', $tag );
+}
+add_filter('script_loader_tag', 'add_async_attribute', 10, 2);
+
+
+
+
+
 
 //Register Main Menu
 
@@ -242,7 +274,7 @@ function realtor_properties_post_type()
 		'label'					=>	__('property', 'realtor'),
 		'description'			=>	__('Properties', 'realtor'),
 		'labels'				=>	$labels,
-		'supports'				=>	array('title', 'editor','thumbnail'),
+		'supports'				=>	array('title', 'editor','thumbnail','comments'),
 		'hierarchical'			=>	false,
 		'public'				=> 	true,
 		'show_ui'				=>	true,
@@ -388,6 +420,11 @@ function your_prefix_meta_boxes( $meta_boxes ) {
                 'type' => 'text',
             ),
             array(
+                'id'   => 'garages',
+                'name' => __( 'Garages', 'realtor' ),
+                'type' => 'text',
+            ),
+            array(
                 'id'   => 'price',
                 'name' => __( 'Price', 'realtor' ),
                 'type' => 'number',
@@ -397,5 +434,169 @@ function your_prefix_meta_boxes( $meta_boxes ) {
     return $meta_boxes;
 }
 
+//Realtor Profile Fields
 
+add_action( 'show_user_profile', 'extra_user_profile_fields' );
+add_action( 'edit_user_profile', 'extra_user_profile_fields' );
+
+function extra_user_profile_fields( $user ) { ?>
+<h3><?php _e("Realtor Profile Information", "realtor"); ?></h3>
+
+<table class="form-table">
+<tr>
+<th><label for="profile-tagline"><?php _e("Profile Tagline"); ?></label></th>
+<td>
+<input type="text" name="profile-tagline" id="profile-tagline" value="<?php echo esc_attr( get_the_author_meta( 'profile-tagline', $user->ID ) ); ?>" class="regular-text" /><br />
+<span class="description"><?php _e("Please write your profile tagline."); ?></span>
+</td>
+</tr>
+<tr>
+<th><label for="address"><?php _e("Address"); ?></label></th>
+<td>
+<input type="text" name="address" id="address" value="<?php echo esc_attr( get_the_author_meta( 'address', $user->ID ) ); ?>" class="regular-text" /><br />
+<span class="description"><?php _e("Please enter your address."); ?></span>
+</td>
+</tr>
+<tr>
+<th><label for="phonenumber"><?php _e("Phone Number"); ?></label></th>
+<td>
+<input type="text" name="phonenumber" id="address" value="<?php echo esc_attr( get_the_author_meta( 'phonenumber', $user->ID ) ); ?>" class="regular-text" /><br />
+<span class="description"><?php _e("Please enter your phonenumber."); ?></span>
+</td>
+</tr>
+<tr>
+<th><label for="facebook-url"><?php _e("Facebook URL"); ?></label></th>
+<td>
+<input type="text" name="facebook-url" id="facebook-url" value="<?php echo esc_attr( get_the_author_meta( 'facebook-url', $user->ID ) ); ?>" class="regular-text" /><br />
+<span class="description"><?php _e("Please enter your Facebook URL."); ?></span>
+</td>
+</tr>
+<tr>
+<th><label for="twitter-url"><?php _e("Twitter URL"); ?></label></th>
+<td>
+<input type="text" name="twitter-url" id="twitter-url" value="<?php echo esc_attr( get_the_author_meta( 'twitter-url', $user->ID ) ); ?>" class="regular-text" /><br />
+<span class="description"><?php _e("Please enter your Twitter URL."); ?></span>
+</td>
+</tr>
+<th><label for="pinterest-url"><?php _e("Pinterest URL"); ?></label></th>
+<td>
+<input type="text" name="pinterest-url" id="pinterest-url" value="<?php echo esc_attr( get_the_author_meta( 'pinterest-url', $user->ID ) ); ?>" class="regular-text" /><br />
+<span class="description"><?php _e("Please enter your Pinterest URL."); ?></span>
+</td>
+</tr>
+<th><label for="googleplus-url"><?php _e("Google+ URL"); ?></label></th>
+<td>
+<input type="text" name="googleplus-url" id="googleplus-url" value="<?php echo esc_attr( get_the_author_meta( 'googleplus-url', $user->ID ) ); ?>" class="regular-text" /><br />
+<span class="description"><?php _e("Please enter your Google+ URL."); ?></span>
+</td>
+</tr>
+<th><label for="tumblr-url"><?php _e("Tumblr URL"); ?></label></th>
+<td>
+<input type="text" name="tumblr-url" id="tumblr-url" value="<?php echo esc_attr( get_the_author_meta( 'tumblr-url', $user->ID ) ); ?>" class="regular-text" /><br />
+<span class="description"><?php _e("Please enter your Tumblr URL."); ?></span>
+</td>
+</tr>
+</table>
+<?php }
+
+add_action( 'personal_options_update', 'save_extra_user_profile_fields' );
+add_action( 'edit_user_profile_update', 'save_extra_user_profile_fields' );
+
+function save_extra_user_profile_fields( $user_id ) {
+
+if ( !current_user_can( 'edit_user', $user_id ) ) { return false; }
+
+update_user_meta( $user_id, 'profile-tagline', $_POST['profile-tagline'] );
+update_user_meta( $user_id, 'address', $_POST['address'] );
+update_user_meta( $user_id, 'phonenumber', $_POST['phonenumber'] );
+update_user_meta( $user_id, 'facebook-url', $_POST['facebook-url'] );
+update_user_meta( $user_id, 'twitter-url', $_POST['twitter-url'] );
+update_user_meta( $user_id, 'pinterest-url', $_POST['pinterest-url'] );
+update_user_meta( $user_id, 'googleplus-url', $_POST['googleplus-url'] );
+update_user_meta( $user_id, 'tumblr-url', $_POST['tumblr-url'] );
+}
+
+//Send Email On Single Property Page
+
+function realtor_single_property_form_submit()
+{
+	$captcha_enabled=true;
+
+	if($captcha_enabled)
+	{
+		//echo $_POST['g-recaptcha-response'];
+		//$request = wp_remote_get(
+		//'https://www.google.com/recaptcha/api/siteverify?secret=your_secret&response=' . $response . '&remoteip=' . $remote_ip);
+		$response = wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', array(
+			'method' => 'POST',
+			'timeout' => 45,
+			'redirection' => 5,
+			'httpversion' => '1.0',
+			'blocking' => true,
+			'headers' => array(),
+			'body' => array( 'secret' => '6LeErQoUAAAAAHfzuGL1W7fROtUOffMJOH7W_T_P', 'response' => $_POST['g-recaptcha-response'], 'remoteip'  => $_SERVER['REMOTE_ADDR'] ),
+			'cookies' => array()
+		    ));
+
+		if(strpos($response['body'], 'true') == null)
+		{
+			echo __("CAPTCHA error! Please resubmit.", 'realtor');
+			print_r($response['body']);
+			wp_die();
+		}
+
+
+	}
+
+	if(!(
+		trim($_POST['full-name']) == "" &&
+		trim($_POST['phone-number']) == "" &&
+		trim($_POST['email']) == "" &&
+		trim($_POST['message']) == ""
+		))
+	{
+		echo trim($_POST['full-name']) == "";
+		$name=$_POST['full-name'];
+		$phone=$_POST['phone-number'];
+		$email=$_POST['email'];
+		$message=$_POST['message'];
+		$author_id=$_POST['author-id'];
+
+
+		if(wp_mail(get_the_author_meta( 'email', $author_id ), "Realtor - Message From ".$name, $message.'<p>Phone Number:'.$phone.'</p>',
+			array(
+			    'From: '.$name.'<'.$email.'>',
+					)
+				))
+		{
+			echo __("Message Sent!",'realtor');
+		}
+		else
+		{	
+			echo __("There was an error. Message not sent", 'realtor');
+		}
+	}
+	else
+	{
+		echo __("Message was not sent. Please fill all fields.", 'realtor');
+
+	}
+	
+	wp_die();
+}
+add_action('wp_ajax_realtor_single_property_form_submit', 'realtor_single_property_form_submit');
+add_action('wp_ajax_nopriv_realtor_single_property_form_submit', 'realtor_single_property_form_submit');
+
+//Set Mail Content Type
+function realtor_set_content_type(){
+    return "text/html";
+}
+add_filter( 'wp_mail_content_type','realtor_set_content_type' );
+
+//Adding Query Vars
+function add_query_vars_filter( $vars ){
+  $vars[] = "keyword";
+  return $vars;
+}
+add_filter( 'query_vars', 'add_query_vars_filter' );
 ?>
