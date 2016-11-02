@@ -5,38 +5,72 @@
             <div class="tab-content">
               <div role="tabpanel" class="tab-pane active" id="sale">
                 <div class="sale-form">
+
                   <form method="get">
-                    <div class="form-group"><label>Enter Your Keyword</label><input type="text" class="form-control" name="s" placeholder="Search by location, zip, area" value="<?php if(isset($_GET['keyword'])){echo $_GET['keyword'];} ?>" /></div>
-                    <div class="form-group"><label>Property Status</label><select type="text" class="form-control" >
-                      <option>Select Property Status</option><option>Select Property Status</option>
+                    <div class="form-group"><label>Enter Your Keyword</label><input type="text" class="form-control" name="keyword" placeholder="Search by location, zip, area" value="<?php if(isset($_GET['keyword'])){echo $_GET['keyword'];} ?>" /></div>
+                    <div class="form-group"><label>Property Status</label><select type="text" name="status" class="form-control" >
+                      <option value="any"><?php echo __('Any', 'realtor'); ?></option>
+                      <?php
+
+                      if(isset($_GET['status']))
+                      {
+                        realtor_select_property_statuses($_GET['status']);
+                      }
+                      else
+                      {
+                        realtor_select_property_statuses("");
+
+                      }
+
+                      ?>
+
                     </select></div>
-                    <div class="form-group"><label>Property Type</label><select type="text" class="form-control" >
-                      <option>Select Property Type</option><option>Select Property Type</option>
+                    <div class="form-group"><label>Property Type</label><select name="type" type="text" class="form-control" >
+		                    <option value="any"><?php echo __('Any', 'realtor'); ?></option>
+		                    <?php
+
+		                    if(isset($_GET['type']))
+		                    {
+			                    realtor_select_property_types($_GET['type']);
+		                    }
+		                    else
+		                    {
+			                    realtor_select_property_types("");
+
+		                    }
+
+		                    ?>
                     </select></div>
                     <div class="row form-group">
-                      <div class="col-sm-6"><label>No. Beds</label><select type="text" class="form-control" >
+                      <div class="col-sm-6"><label>No. Beds</label><select type="text" name="beds" class="form-control" >
                       <option>Any</option><option>Any</option>
                     </select></div>
-                      <div class="col-sm-6"><label>No. Baths</label><select type="text" class="form-control" >
+                      <div class="col-sm-6"><label>No. Baths</label><select type="text" name="baths" class="form-control" >
                       <option>Any</option><option>Any</option>
                     </select></div>
                     </div>
                     <div class="row form-group">
-                      <div class="col-sm-6"><label>Min. Area (Sqft)</label><select type="text" class="form-control" >
+                      <div class="col-sm-6"><label>Min. Area (Sqft)</label><select type="text" name="minarea" class="form-control" >
                       <option>Any</option><option>Any</option>
                     </select></div>
-                      <div class="col-sm-6"><label>Max. Area (Sqft)</label><select type="text" class="form-control" >
+                      <div class="col-sm-6"><label>Max. Area (Sqft)</label><select type="text" name="maxarea" class="form-control" >
                       <option>Any</option><option>Any</option>
                     </select></div>
                     </div>
                     <div class="row form-group">
-                      <div class="col-sm-6"><label>Price From</label><select type="text" class="form-control" >
+                      <div class="col-sm-6"><label>Price From</label><select type="text" name="pricefrom" class="form-control" >
                       <option>Any</option><option>Any</option>
                     </select></div>
-                      <div class="col-sm-6"><label>Price To</label><select type="text" class="form-control" >
+                      <div class="col-sm-6"><label>Price To</label><select type="text" name="priceto" class="form-control" >
                       <option>Any</option><option>Any</option>
                     </select></div>
                     </div>
+                    <div class="row form-group">
+                      <div class="col-sm-6"><label>Parking</label><select type="text" name="garage" class="form-control" >
+                          <option>Any</option><option>Any</option>
+                        </select></div>
+                    </div>
+
                     <div class="form-group">
                       <input type="submit" value="Find Properties" class="btn btn-success" />
                     </div>
