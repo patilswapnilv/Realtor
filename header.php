@@ -55,7 +55,7 @@
             <button type="button" class="navbar-toggle nav-right-button" data-toggle="collapse" data-target=".my_nav"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
           </div>
 
-           <?php
+            <?php
        
               $menu_args =array(
 
@@ -72,7 +72,7 @@
                 );
 
                wp_nav_menu($menu_args); 
-             ?>
+                ?>
           <div class="search-sec navbar-right">
             <input type="text" class="form-control" placeholder="Type" />
             <button type="button"><i class="fa fa-search" aria-hidden="true"></i></button>

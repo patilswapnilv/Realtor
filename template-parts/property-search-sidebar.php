@@ -7,39 +7,38 @@
                 <div class="sale-form">
 
                   <form method="get">
-                    <div class="form-group"><label>Enter Your Keyword</label><input type="text" class="form-control" name="keyword" placeholder="Search by location, zip, area" value="<?php if(isset($_GET['keyword'])){echo $_GET['keyword'];} ?>" /></div>
+                    <div class="form-group"><label>Enter Your Keyword</label><input type="text" class="form-control" name="keyword" placeholder="Search by location, zip, area" value="<?php if(isset($_GET['keyword'])) {echo $_GET['keyword'];
+                   } ?>" /></div>
                     <div class="form-group"><label>Property Status</label><select type="text" name="status" class="form-control" >
                       <option value="any"><?php echo __('Any', 'realtor'); ?></option>
-                      <?php
+                        <?php
 
-                      if(isset($_GET['status']))
-                      {
-                        realtor_select_property_statuses($_GET['status']);
-                      }
-                      else
-                      {
-                        realtor_select_property_statuses("");
+                        if(isset($_GET['status'])) {
+                            realtor_select_property_statuses($_GET['status']);
+                        }
+                        else
+                        {
+                            realtor_select_property_statuses("");
 
-                      }
+                        }
 
-                      ?>
+                        ?>
 
                     </select></div>
                     <div class="form-group"><label>Property Type</label><select name="type" type="text" class="form-control" >
-		                    <option value="any"><?php echo __('Any', 'realtor'); ?></option>
-		                    <?php
+                            <option value="any"><?php echo __('Any', 'realtor'); ?></option>
+                        <?php
 
-		                    if(isset($_GET['type']))
-		                    {
-			                    realtor_select_property_types($_GET['type']);
-		                    }
-		                    else
-		                    {
-			                    realtor_select_property_types("");
+                        if(isset($_GET['type'])) {
+                            realtor_select_property_types($_GET['type']);
+                        }
+                        else
+                        {
+                            realtor_select_property_types("");
 
-		                    }
+                        }
 
-		                    ?>
+                        ?>
                     </select></div>
                     <div class="row form-group">
                       <div class="col-sm-6"><label>No. Beds</label><select type="text" name="beds" class="form-control" >

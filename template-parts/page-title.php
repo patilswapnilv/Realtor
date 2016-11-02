@@ -4,20 +4,19 @@
       	<div class="col-sm-6">
         	<h1>
             <?php 
-            if(is_home())
-            {
-              echo get_bloginfo();
+            if(is_home()) {
+                echo get_bloginfo();
             }
             else
             {
-              echo get_the_title(); 
+                echo get_the_title(); 
             }
 
             ?>
           </h1>
         </div>
         <div class="col-sm-6 breadcrumb">
-        	<?php custom_breadcrumbs(); ?>
+            <?php custom_breadcrumbs(); ?>
         </div>
       </div>
       </div>

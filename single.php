@@ -2,12 +2,12 @@
 
 <article>
   <div class="article">
-  <?php get_template_part('template-parts/page-title'); ?>
+    <?php get_template_part('template-parts/page-title'); ?>
     <div class="page-result">
     <div class="container">
-    	<div class="row">
-      	<div class="col-sm-6">
-        	<h4>Rencent News & Blog Section</h4>
+        <div class="row">
+          <div class="col-sm-6">
+            <h4>Rencent News & Blog Section</h4>
           <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.</p>
           <span class="line"></span>
         </div>        
@@ -22,37 +22,36 @@
                   <div class="blog-page">
                     <div class="">
 
-                      <?php while ( have_posts() ) : the_post(); ?>
-                        <?php if(has_post_thumbnail()) 
-                        { ?>
+                        <?php while ( have_posts() ) : the_post(); ?>
+                        <?php if(has_post_thumbnail()) { ?>
                           <div class="b-image"><img src="<?php echo the_post_thumbnail_url('realtor_single_blog_thumbnail');?>" width="773" height="430" alt="" class="img-responsive" /></div>
                         <?php
                         }
                         ?>  
                         <div class="b-detail">
                           <h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
-                          <div class="blog-info"><span><?php echo __('By','realtor').' '; ?><a href="<?php echo get_author_posts_url( get_the_author_meta( 'ID' )); ?>"><?php the_author(); ?></a></span>   |   <span><?php the_category(', '); ?></span>   |   <span>
+                          <div class="blog-info"><span><?php echo __('By', 'realtor').' '; ?><a href="<?php echo get_author_posts_url(get_the_author_meta('ID')); ?>"><?php the_author(); ?></a></span>   |   <span><?php the_category(', '); ?></span>   |   <span>
                                 <?php
                                   $num_comments = get_comments_number(); // get_comments_number returns only a numeric value
 
-                          if ( comments_open() ) {
-                            if ( $num_comments == 0 ) {
-                              $comments = __('No Comments', 'realtor');
-                            } elseif ( $num_comments > 1 ) {
-                              $comments = $num_comments . __(' Comments', 'realtor');
-                            } else {
-                              $comments = __('1 Comment');
-                            }
-                            $write_comments = '<a href="' . get_comments_link() .'">'. $comments.'</a>';
-                          } else {
-                            $write_comments =  __('Comments Disabled');
-                          }
-                          echo $write_comments;
+                                if (comments_open() ) {
+                                    if ($num_comments == 0 ) {
+                                        $comments = __('No Comments', 'realtor');
+                                    } elseif ($num_comments > 1 ) {
+                                        $comments = $num_comments . __(' Comments', 'realtor');
+                                    } else {
+                                        $comments = __('1 Comment');
+                                    }
+                                        $write_comments = '<a href="' . get_comments_link() .'">'. $comments.'</a>';
+                                } else {
+                                        $write_comments =  __('Comments Disabled');
+                                }
+                                echo $write_comments;
                                 ?>
 
                               </span>   |        <span><a href="javascript:;"><i class="more"></i>Share this post</a></span></div>
-                          <?php the_content(); ?>
-                          <?php endwhile; wp_reset_query();?>
+                            <?php the_content(); ?>
+                        <?php endwhile; wp_reset_query();?>
                           </div>
                       <div class="tags"> <?php __("Tags:", 'realtor'); the_tags();?> </div>
                     </div>
@@ -67,9 +66,9 @@
                   </div>
                 </div>
                 <div class="comment-blog">
-                  <?php if ( comments_open()) {
-                    comments_template();
-                  } ?>
+                    <?php if (comments_open()) {
+                        comments_template();
+                    } ?>
                   
                 </div>
                 <div class="leave-comment">

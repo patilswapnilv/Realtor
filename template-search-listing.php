@@ -10,7 +10,7 @@ get_header();
 ?>
 
 
-  	
+      
 <article>
   <div class="article">
     <?php get_template_part('template-parts/page-title'); ?>
@@ -21,8 +21,8 @@ get_header();
           <p>
 
             <?php while ( have_posts() ) : the_post(); ?>
-              <?php the_content(); ?>
-          <?php endwhile; wp_reset_query();?> 
+                <?php the_content(); ?>
+            <?php endwhile; wp_reset_query();?> 
 
           </p>
           <span class="line"></span>
@@ -36,25 +36,24 @@ get_header();
     <section class="section-inner">
       <div class="container">
         <div class="row">
-          <?php get_template_part("template-parts/property-search-sidebar"); ?>
+            <?php get_template_part("template-parts/property-search-sidebar"); ?>
           <div class="col-sm-8">
             <div class="row">
-              <?php
+                <?php
 
-              $regular_posts_args = array(
+                $regular_posts_args = array(
 
                 'post_type'       =>  'property',
                 'paged'         =>  get_query_var('paged'),
 
                 );
 
-              //If only status is selected in search
-              if(are_set(array('status')) && !are_set(array('type', 'keyword', 'beds', 'baths', 'minarea','maxarea','pricefrom','priceto')))
-              {
-                  $regular_posts_args = array(
+                //If only status is selected in search
+                if(are_set(array('status')) && !are_set(array('type', 'keyword', 'beds', 'baths', 'minarea','maxarea','pricefrom','priceto'))) {
+                    $regular_posts_args = array(
 
                       'post_type' => 'property',
-                      'paged'     => get_query_var( 'paged' ),
+                      'paged'     => get_query_var('paged'),
                       'tax_query' => array(
                           array(
                               'taxonomy' => 'property_statuses',
@@ -63,17 +62,16 @@ get_header();
                           ),
 
                       )
-                  );
+                      );
 
-              }
-              //if only type is selected in search
-              if(are_set(array('type')) && !are_set(array('status')))
-              {
+                }
+                //if only type is selected in search
+                if(are_set(array('type')) && !are_set(array('status'))) {
 
-                  $regular_posts_args = array(
+                    $regular_posts_args = array(
 
                       'post_type' => 'property',
-                      'paged'     => get_query_var( 'paged' ),
+                      'paged'     => get_query_var('paged'),
                       'tax_query' => array(
                           array(
                               'taxonomy' => 'property_types',
@@ -82,41 +80,40 @@ get_header();
                           ),
 
                       )
-                  );
+                      );
 
-              }
-              //Both type and Status are selected in search
-              if(are_set(array('status', 'type')))
-              {
+                }
+                //Both type and Status are selected in search
+                if(are_set(array('status', 'type'))) {
 
-		              $regular_posts_args = array(
+                    $regular_posts_args = array(
 
-			              'post_type' => 'property',
-			              'paged'     => get_query_var( 'paged' ),
-			              'tax_query' => array(
+                     'post_type' => 'property',
+                     'paged'     => get_query_var('paged'),
+                     'tax_query' => array(
                               'relation'    => 'AND',
-				              array(
-					              'taxonomy' => 'property_types',
-					              'field'    => 'name',
-					              'terms'    => $_GET['type'],
-				              ),
+                    array(
+                     'taxonomy' => 'property_types',
+                     'field'    => 'name',
+                     'terms'    => $_GET['type'],
+                      ),
                               array(
                                   'taxonomy' => 'property_statuses',
                                   'field'    => 'name',
                                   'terms'    => $_GET['status'],
                               ),
 
-			              )
-		              );
+                     )
+                    );
 
-              }
+                }
 
                 
 
-              ?>
-              <?php query_posts($regular_posts_args); ?>
+                ?>
+                <?php query_posts($regular_posts_args); ?>
 
-              <?php get_template_part("template-parts/properties-loop"); ?>
+                <?php get_template_part("template-parts/properties-loop"); ?>
 
              
 

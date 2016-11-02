@@ -161,9 +161,11 @@ if (typeof Object.create !== "function") {
 
         reload : function () {
             var base = this;
-            window.setTimeout(function () {
-                base.updateVars();
-            }, 0);
+            window.setTimeout(
+                function () {
+                    base.updateVars();
+                }, 0
+            );
         },
 
         watchVisibility : function () {
@@ -176,13 +178,15 @@ if (typeof Object.create !== "function") {
             } else {
                 return false;
             }
-            base.checkVisible = window.setInterval(function () {
-                if (base.$elem.is(":visible")) {
-                    base.reload();
-                    base.$elem.animate({opacity: 1}, 200);
-                    window.clearInterval(base.checkVisible);
-                }
-            }, 500);
+            base.checkVisible = window.setInterval(
+                function () {
+                    if (base.$elem.is(":visible")) {
+                        base.reload();
+                        base.$elem.animate({opacity: 1}, 200);
+                        window.clearInterval(base.checkVisible);
+                    }
+                }, 500
+            );
         },
 
         wrapItems : function () {
@@ -284,10 +288,12 @@ if (typeof Object.create !== "function") {
                         window.clearInterval(base.autoPlayInterval);
                     }
                     window.clearTimeout(smallDelay);
-                    smallDelay = window.setTimeout(function () {
-                        lastWindowWidth = $(window).width();
-                        base.updateVars();
-                    }, base.options.responsiveRefreshRate);
+                    smallDelay = window.setTimeout(
+                        function () {
+                            lastWindowWidth = $(window).width();
+                            base.updateVars();
+                        }, base.options.responsiveRefreshRate
+                    );
                 }
             };
             $(window).resize(base.resizer);
@@ -306,29 +312,33 @@ if (typeof Object.create !== "function") {
                 roundPages = 0,
                 lastItem = base.itemsAmount - base.options.items;
 
-            base.$owlItems.each(function (index) {
-                var $this = $(this);
-                $this
+            base.$owlItems.each(
+                function (index) {
+                    var $this = $(this);
+                    $this
                     .css({"width": base.itemWidth})
                     .data("owl-item", Number(index));
 
-                if (index % base.options.items === 0 || index === lastItem) {
-                    if (!(index > lastItem)) {
-                        roundPages += 1;
+                    if (index % base.options.items === 0 || index === lastItem) {
+                        if (!(index > lastItem)) {
+                            roundPages += 1;
+                        }
                     }
+                    $this.data("owl-roundPages", roundPages);
                 }
-                $this.data("owl-roundPages", roundPages);
-            });
+            );
         },
 
         appendWrapperSizes : function () {
             var base = this,
                 width = base.$owlItems.length * base.itemWidth;
 
-            base.$owlWrapper.css({
-                "width": width * 2,
-                "left": 0
-            });
+            base.$owlWrapper.css(
+                {
+                    "width": width * 2,
+                    "left": 0
+                }
+            );
             base.appendItemsSizes();
         },
 
@@ -407,32 +417,40 @@ if (typeof Object.create !== "function") {
                 buttonsWrapper = $("<div class=\"owl-buttons\"/>");
             base.owlControls.append(buttonsWrapper);
 
-            base.buttonPrev = $("<div/>", {
-                "class" : "owl-prev",
-                "html" : base.options.navigationText[0] || ""
-            });
+            base.buttonPrev = $(
+                "<div/>", {
+                    "class" : "owl-prev",
+                    "html" : base.options.navigationText[0] || ""
+                }
+            );
 
-            base.buttonNext = $("<div/>", {
-                "class" : "owl-next",
-                "html" : base.options.navigationText[1] || ""
-            });
+            base.buttonNext = $(
+                "<div/>", {
+                    "class" : "owl-next",
+                    "html" : base.options.navigationText[1] || ""
+                }
+            );
 
             buttonsWrapper
                 .append(base.buttonPrev)
                 .append(base.buttonNext);
 
-            buttonsWrapper.on("touchstart.owlControls mousedown.owlControls", "div[class^=\"owl\"]", function (event) {
-                event.preventDefault();
-            });
-
-            buttonsWrapper.on("touchend.owlControls mouseup.owlControls", "div[class^=\"owl\"]", function (event) {
-                event.preventDefault();
-                if ($(this).hasClass("owl-next")) {
-                    base.next();
-                } else {
-                    base.prev();
+            buttonsWrapper.on(
+                "touchstart.owlControls mousedown.owlControls", "div[class^=\"owl\"]", function (event) {
+                    event.preventDefault();
                 }
-            });
+            );
+
+            buttonsWrapper.on(
+                "touchend.owlControls mouseup.owlControls", "div[class^=\"owl\"]", function (event) {
+                    event.preventDefault();
+                    if ($(this).hasClass("owl-next")) {
+                        base.next();
+                    } else {
+                        base.prev();
+                    }
+                }
+            );
         },
 
         buildPagination : function () {
@@ -441,12 +459,14 @@ if (typeof Object.create !== "function") {
             base.paginationWrapper = $("<div class=\"owl-pagination\"/>");
             base.owlControls.append(base.paginationWrapper);
 
-            base.paginationWrapper.on("touchend.owlControls mouseup.owlControls", ".owl-page", function (event) {
-                event.preventDefault();
-                if (Number($(this).data("owl-page")) !== base.currentItem) {
-                    base.goTo(Number($(this).data("owl-page")), true);
+            base.paginationWrapper.on(
+                "touchend.owlControls mouseup.owlControls", ".owl-page", function (event) {
+                    event.preventDefault();
+                    if (Number($(this).data("owl-page")) !== base.currentItem) {
+                        base.goTo(Number($(this).data("owl-page")), true);
+                    }
                 }
-            });
+            );
         },
 
         updatePagination : function () {
@@ -473,13 +493,17 @@ if (typeof Object.create !== "function") {
                     if (lastPage === i) {
                         lastItem = base.itemsAmount - base.options.items;
                     }
-                    paginationButton = $("<div/>", {
-                        "class" : "owl-page"
-                    });
-                    paginationButtonInner = $("<span></span>", {
-                        "text": base.options.paginationNumbers === true ? counter : "",
-                        "class": base.options.paginationNumbers === true ? "owl-numbers" : ""
-                    });
+                    paginationButton = $(
+                        "<div/>", {
+                            "class" : "owl-page"
+                        }
+                    );
+                    paginationButtonInner = $(
+                        "<span></span>", {
+                            "text": base.options.paginationNumbers === true ? counter : "",
+                            "class": base.options.paginationNumbers === true ? "owl-numbers" : ""
+                        }
+                    );
                     paginationButton.append(paginationButtonInner);
 
                     paginationButton.data("owl-page", lastPage === i ? lastItem : i);
@@ -495,14 +519,16 @@ if (typeof Object.create !== "function") {
             if (base.options.pagination === false) {
                 return false;
             }
-            base.paginationWrapper.find(".owl-page").each(function () {
-                if ($(this).data("owl-roundPages") === $(base.$owlItems[base.currentItem]).data("owl-roundPages")) {
-                    base.paginationWrapper
+            base.paginationWrapper.find(".owl-page").each(
+                function () {
+                    if ($(this).data("owl-roundPages") === $(base.$owlItems[base.currentItem]).data("owl-roundPages")) {
+                        base.paginationWrapper
                         .find(".owl-page")
                         .removeClass("active");
-                    $(this).addClass("active");
+                        $(this).addClass("active");
+                    }
                 }
-            });
+            );
         },
 
         checkNavigation : function () {
@@ -627,21 +653,27 @@ if (typeof Object.create !== "function") {
 
                 if (speed === true) {
                     base.swapSpeed("paginationSpeed");
-                    window.setTimeout(function () {
-                        base.isCss3Finish = true;
-                    }, base.options.paginationSpeed);
+                    window.setTimeout(
+                        function () {
+                            base.isCss3Finish = true;
+                        }, base.options.paginationSpeed
+                    );
 
                 } else if (speed === "rewind") {
                     base.swapSpeed(base.options.rewindSpeed);
-                    window.setTimeout(function () {
-                        base.isCss3Finish = true;
-                    }, base.options.rewindSpeed);
+                    window.setTimeout(
+                        function () {
+                            base.isCss3Finish = true;
+                        }, base.options.rewindSpeed
+                    );
 
                 } else {
                     base.swapSpeed("slideSpeed");
-                    window.setTimeout(function () {
-                        base.isCss3Finish = true;
-                    }, base.options.slideSpeed);
+                    window.setTimeout(
+                        function () {
+                            base.isCss3Finish = true;
+                        }, base.options.slideSpeed
+                    );
                 }
                 base.transition3d(goToPixel);
             } else {
@@ -717,9 +749,11 @@ if (typeof Object.create !== "function") {
                 return false;
             }
             window.clearInterval(base.autoPlayInterval);
-            base.autoPlayInterval = window.setInterval(function () {
-                base.next(true);
-            }, base.options.autoPlay);
+            base.autoPlayInterval = window.setInterval(
+                function () {
+                    base.next(true);
+                }, base.options.autoPlay
+            );
         },
 
         swapSpeed : function (action) {
@@ -775,14 +809,16 @@ if (typeof Object.create !== "function") {
             var base = this;
 
             base.isCssFinish = false;
-            base.$owlWrapper.stop(true, true).animate({
-                "left" : value
-            }, {
-                duration : speed || base.options.slideSpeed,
-                complete : function () {
-                    base.isCssFinish = true;
+            base.$owlWrapper.stop(true, true).animate(
+                {
+                    "left" : value
+                }, {
+                    duration : speed || base.options.slideSpeed,
+                    complete : function () {
+                        base.isCssFinish = true;
+                    }
                 }
-            });
+            );
         },
 
         checkBrowser : function () {
@@ -853,9 +889,11 @@ if (typeof Object.create !== "function") {
         disabledEvents :  function () {
             var base = this;
             base.$elem.on("dragstart.owl", function (event) { event.preventDefault(); });
-            base.$elem.on("mousedown.disableTextSelect", function (e) {
-                return $(e.target).is('input, textarea, select, option');
-            });
+            base.$elem.on(
+                "mousedown.disableTextSelect", function (e) {
+                    return $(e.target).is('input, textarea, select, option');
+                }
+            );
         },
 
         gestures : function () {
@@ -872,7 +910,7 @@ if (typeof Object.create !== "function") {
                     sliding : null,
                     dargging: null,
                     targetElement : null
-                };
+            };
 
             base.isCssFinish = true;
 
@@ -1019,12 +1057,14 @@ if (typeof Object.create !== "function") {
                     newPosition = base.getNewPosition();
                     base.goTo(newPosition, false, "drag");
                     if (locals.targetElement === ev.target && base.browser.isTouch !== true) {
-                        $(ev.target).on("click.disable", function (ev) {
-                            ev.stopImmediatePropagation();
-                            ev.stopPropagation();
-                            ev.preventDefault();
-                            $(ev.target).off("click.disable");
-                        });
+                        $(ev.target).on(
+                            "click.disable", function (ev) {
+                                ev.stopImmediatePropagation();
+                                ev.stopPropagation();
+                                ev.preventDefault();
+                                $(ev.target).off("click.disable");
+                            }
+                        );
                         handlers = $._data(ev.target, "events").click;
                         owlStopEvent = handlers.pop();
                         handlers.splice(0, 0, owlStopEvent);
@@ -1054,24 +1094,26 @@ if (typeof Object.create !== "function") {
                 goal = base.newPosX,
                 closest = null;
 
-            $.each(array, function (i, v) {
-                if (goal - (base.itemWidth / 20) > array[i + 1] && goal - (base.itemWidth / 20) < v && base.moveDirection() === "left") {
-                    closest = v;
-                    if (base.options.scrollPerPage === true) {
-                        base.currentItem = $.inArray(closest, base.positionsInArray);
-                    } else {
-                        base.currentItem = i;
-                    }
-                } else if (goal + (base.itemWidth / 20) < v && goal + (base.itemWidth / 20) > (array[i + 1] || array[i] - base.itemWidth) && base.moveDirection() === "right") {
-                    if (base.options.scrollPerPage === true) {
-                        closest = array[i + 1] || array[array.length - 1];
-                        base.currentItem = $.inArray(closest, base.positionsInArray);
-                    } else {
-                        closest = array[i + 1];
-                        base.currentItem = i + 1;
+            $.each(
+                array, function (i, v) {
+                    if (goal - (base.itemWidth / 20) > array[i + 1] && goal - (base.itemWidth / 20) < v && base.moveDirection() === "left") {
+                        closest = v;
+                        if (base.options.scrollPerPage === true) {
+                            base.currentItem = $.inArray(closest, base.positionsInArray);
+                        } else {
+                            base.currentItem = i;
+                        }
+                    } else if (goal + (base.itemWidth / 20) < v && goal + (base.itemWidth / 20) > (array[i + 1] || array[i] - base.itemWidth) && base.moveDirection() === "right") {
+                        if (base.options.scrollPerPage === true) {
+                            closest = array[i + 1] || array[array.length - 1];
+                            base.currentItem = $.inArray(closest, base.positionsInArray);
+                        } else {
+                            closest = array[i + 1];
+                            base.currentItem = i + 1;
+                        }
                     }
                 }
-            });
+            );
             return base.currentItem;
         },
 
@@ -1091,40 +1133,56 @@ if (typeof Object.create !== "function") {
         customEvents : function () {
             /*jslint unparam: true*/
             var base = this;
-            base.$elem.on("owl.next", function () {
-                base.next();
-            });
-            base.$elem.on("owl.prev", function () {
-                base.prev();
-            });
-            base.$elem.on("owl.play", function (event, speed) {
-                base.options.autoPlay = speed;
-                base.play();
-                base.hoverStatus = "play";
-            });
-            base.$elem.on("owl.stop", function () {
-                base.stop();
-                base.hoverStatus = "stop";
-            });
-            base.$elem.on("owl.goTo", function (event, item) {
-                base.goTo(item);
-            });
-            base.$elem.on("owl.jumpTo", function (event, item) {
-                base.jumpTo(item);
-            });
+            base.$elem.on(
+                "owl.next", function () {
+                    base.next();
+                }
+            );
+            base.$elem.on(
+                "owl.prev", function () {
+                    base.prev();
+                }
+            );
+            base.$elem.on(
+                "owl.play", function (event, speed) {
+                    base.options.autoPlay = speed;
+                    base.play();
+                    base.hoverStatus = "play";
+                }
+            );
+            base.$elem.on(
+                "owl.stop", function () {
+                    base.stop();
+                    base.hoverStatus = "stop";
+                }
+            );
+            base.$elem.on(
+                "owl.goTo", function (event, item) {
+                    base.goTo(item);
+                }
+            );
+            base.$elem.on(
+                "owl.jumpTo", function (event, item) {
+                    base.jumpTo(item);
+                }
+            );
         },
 
         stopOnHover : function () {
             var base = this;
             if (base.options.stopOnHover === true && base.browser.isTouch !== true && base.options.autoPlay !== false) {
-                base.$elem.on("mouseover", function () {
-                    base.stop();
-                });
-                base.$elem.on("mouseout", function () {
-                    if (base.hoverStatus !== "stop") {
-                        base.play();
+                base.$elem.on(
+                    "mouseover", function () {
+                        base.stop();
                     }
-                });
+                );
+                base.$elem.on(
+                    "mouseout", function () {
+                        if (base.hoverStatus !== "stop") {
+                            base.play();
+                        }
+                    }
+                );
             }
         },
 
@@ -1216,9 +1274,11 @@ if (typeof Object.create !== "function") {
                 var $currentItem = $(base.$owlItems[base.currentItem]).height();
                 base.wrapperOuter.css("height", $currentItem + "px");
                 if (!base.wrapperOuter.hasClass("autoHeight")) {
-                    window.setTimeout(function () {
-                        base.wrapperOuter.addClass("autoHeight");
-                    }, 0);
+                    window.setTimeout(
+                        function () {
+                            base.wrapperOuter.addClass("autoHeight");
+                        }, 0
+                    );
                 }
             }
 
@@ -1293,11 +1353,13 @@ if (typeof Object.create !== "function") {
 
             base.$owlWrapper
                 .addClass('owl-origin')
-                .css({
-                    "-webkit-transform-origin" : origin + "px",
-                    "-moz-perspective-origin" : origin + "px",
-                    "perspective-origin" : origin + "px"
-                });
+                .css(
+                    {
+                        "-webkit-transform-origin" : origin + "px",
+                        "-moz-perspective-origin" : origin + "px",
+                        "perspective-origin" : origin + "px"
+                    }
+                );
             function transStyles(prevPos) {
                 return {
                     "position" : "relative",
@@ -1305,30 +1367,36 @@ if (typeof Object.create !== "function") {
                 };
             }
 
-            $prevItem
+                $prevItem
                 .css(transStyles(prevPos, 10))
                 .addClass(outClass)
-                .on(animEnd, function () {
-                    base.endPrev = true;
-                    $prevItem.off(animEnd);
-                    base.clearTransStyle($prevItem, outClass);
-                });
+                .on(
+                    animEnd, function () {
+                        base.endPrev = true;
+                        $prevItem.off(animEnd);
+                        base.clearTransStyle($prevItem, outClass);
+                    }
+                );
 
             $currentItem
                 .addClass(inClass)
-                .on(animEnd, function () {
-                    base.endCurrent = true;
-                    $currentItem.off(animEnd);
-                    base.clearTransStyle($currentItem, inClass);
-                });
+                .on(
+                    animEnd, function () {
+                        base.endCurrent = true;
+                        $currentItem.off(animEnd);
+                        base.clearTransStyle($currentItem, inClass);
+                    }
+                );
         },
 
         clearTransStyle : function (item, classToRemove) {
             var base = this;
-            item.css({
-                "position" : "",
-                "left" : ""
-            }).removeClass(classToRemove);
+            item.css(
+                {
+                    "position" : "",
+                    "left" : ""
+                }
+            ).removeClass(classToRemove);
 
             if (base.endPrev && base.endCurrent) {
                 base.$owlWrapper.removeClass('owl-origin');
@@ -1438,15 +1506,17 @@ if (typeof Object.create !== "function") {
     };
 
     $.fn.owlCarousel = function (options) {
-        return this.each(function () {
-            if ($(this).data("owl-init") === true) {
-                return false;
+        return this.each(
+            function () {
+                if ($(this).data("owl-init") === true) {
+                    return false;
+                }
+                $(this).data("owl-init", true);
+                var carousel = Object.create(Carousel);
+                carousel.init(options, this);
+                $.data(this, "owlCarousel", carousel);
             }
-            $(this).data("owl-init", true);
-            var carousel = Object.create(Carousel);
-            carousel.init(options, this);
-            $.data(this, "owlCarousel", carousel);
-        });
+        );
     };
 
     $.fn.owlCarousel.options = {

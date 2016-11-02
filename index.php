@@ -2,12 +2,12 @@
 
 <article>
   <div class="article">
-  <?php get_template_part('template-parts/page-title'); ?>
+    <?php get_template_part('template-parts/page-title'); ?>
     <div class="page-result">
     <div class="container">
-    	<div class="row">
-      	<div class="col-sm-6">
-        	<h4>Rencent News & Blog Section</h4>
+        <div class="row">
+          <div class="col-sm-6">
+            <h4>Rencent News & Blog Section</h4>
           <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.</p>
           <span class="line"></span>
         </div>        
@@ -17,31 +17,30 @@
     <section class="section-inner">
       <div class="container">
         <div class="row">
-        	<div class="col-sm-8">
+            <div class="col-sm-8">
           <div class="blog-section">
-          	<?php
-              if(get_option( 'sticky_posts' ))
-              {
+            <?php
+            if(get_option('sticky_posts')) {
                 $regular_posts_args = array(
 
                 'post_type'       =>  'post',
                 'post_status'       =>  'publish',
                 'paged'         =>  get_query_var('paged'),
                 'ignore_sticky_posts' =>  1,
-                'post__in'        => get_option( 'sticky_posts' )
+                'post__in'        => get_option('sticky_posts')
 
                 );
 
                 query_posts($regular_posts_args);         
                 get_template_part("template-parts/posts-loop");
-              }
+            }
 
 
             
 
-          ?>
+            ?>
 
-          <?php
+            <?php
 
             $regular_posts_args = array(
 
@@ -49,17 +48,17 @@
             'post_status'       =>  'publish',
             'paged'         =>  get_query_var('paged'),
             'ignore_sticky_posts' =>  1,
-            'post__not_in'        => get_option( 'sticky_posts' )
+            'post__not_in'        => get_option('sticky_posts')
 
             );        
 
-          ?>
-          <?php query_posts($regular_posts_args); ?>
-          <?php get_template_part("template-parts/posts-loop"); ?>
+            ?>
+            <?php query_posts($regular_posts_args); ?>
+            <?php get_template_part("template-parts/posts-loop"); ?>
             </div>
           </div>
-        	<?php get_template_part("template-parts/sidebar-col"); ?>
-        	
+            <?php get_template_part("template-parts/sidebar-col"); ?>
+            
         </div>
       </div>     
     </section>

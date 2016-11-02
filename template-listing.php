@@ -10,7 +10,7 @@ get_header();
 ?>
 
 
-  	
+      
 <article>
   <div class="article">
     <?php get_template_part('template-parts/page-title'); ?>
@@ -21,8 +21,8 @@ get_header();
           <p>
 
             <?php while ( have_posts() ) : the_post(); ?>
-              <?php the_content(); ?>
-          <?php endwhile; wp_reset_query();?> 
+                <?php the_content(); ?>
+            <?php endwhile; wp_reset_query();?> 
 
           </p>
           <span class="line"></span>
@@ -36,10 +36,10 @@ get_header();
     <section class="section-inner">
       <div class="container">
         <div class="row">
-          <?php get_template_part("template-parts/property-sidebar"); ?>
+            <?php get_template_part("template-parts/property-sidebar"); ?>
           <div class="col-sm-8">
             <div class="row">
-              <?php
+                <?php
 
                 $regular_posts_args = array(
 
@@ -48,9 +48,9 @@ get_header();
 
                 );
 
-              ?>
-              <?php query_posts($regular_posts_args); ?>
-              <?php get_template_part("template-parts/properties-loop"); ?>
+                ?>
+                <?php query_posts($regular_posts_args); ?>
+                <?php get_template_part("template-parts/properties-loop"); ?>
 
              
 

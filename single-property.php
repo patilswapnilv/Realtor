@@ -1,12 +1,12 @@
   <?php
   get_header();
 
-  ?>
+    ?>
 
   <article>
     <?php while ( have_posts() ) : the_post(); ?>
     <div class="article">
-     <?php get_template_part('template-parts/page-title'); ?>
+        <?php get_template_part('template-parts/page-title'); ?>
       <div class="page-result">
       <div class="container">
         <div class="row">
@@ -221,7 +221,7 @@
             <div class="col-sm-8">
               <div class="p-image"><img src="<?php echo the_post_thumbnail_url('realtor_property_single');?>" alt="" class="img-responsive" /></div>
               <div class="p-box p-detail p-paddingless">
-                <div class="single-status"><?php the_terms( get_the_id(), 'property_statuses', '', ', ', '' ); ?></div><div class="single-type"><?php the_terms( get_the_id(), 'property_types', '', ', ', '' ); ?></div><div class="single-brief"><?php echo get_post_meta(get_the_id(),'area',true); ?> Sqm | <?php echo get_post_meta(get_the_id(),'beds',true); ?> Beds | <?php echo get_post_meta(get_the_id(),'baths',true); ?> Baths | <?php echo get_post_meta(get_the_id(),'parking',true); ?> Parking </div><div class="price">$<?php echo get_post_meta(get_the_id(),'price',true); ?> </div>
+                <div class="single-status"><?php the_terms(get_the_id(), 'property_statuses', '', ', ', ''); ?></div><div class="single-type"><?php the_terms(get_the_id(), 'property_types', '', ', ', ''); ?></div><div class="single-brief"><?php echo get_post_meta(get_the_id(), 'area', true); ?> Sqm | <?php echo get_post_meta(get_the_id(), 'beds', true); ?> Beds | <?php echo get_post_meta(get_the_id(), 'baths', true); ?> Baths | <?php echo get_post_meta(get_the_id(), 'parking', true); ?> Parking </div><div class="price">$<?php echo get_post_meta(get_the_id(), 'price', true); ?> </div>
               </div>
               <div class="p-box p-detail">
                 <h4><?php echo __('Property Description', 'realtor'); ?></h4>
@@ -236,98 +236,93 @@
                       $features_col_2=array();
                       $features_col_3=array();
 
-                      foreach (get_post_meta(get_the_id(),'features',true) as $key => $value) {
-                        foreach ($value as $sub_key => $sub_value) {
-                          array_push($all_features, $sub_value);
-                        }
-                      }
+                foreach (get_post_meta(get_the_id(), 'features', true) as $key => $value) {
+                    foreach ($value as $sub_key => $sub_value) {
+                        array_push($all_features, $sub_value);
+                    }
+                }
                       $size=sizeof($all_features);
 
-                      if($size > 2)
-                      {
-                        $differenciator = 0;
+                if($size > 2) {
+                    $differenciator = 0;
                         
-                        if(($size-1) % 2 == 1)
-                        {
-                          $differenciator = 1;
+                    if(($size-1) % 2 == 1) {
+                        $differenciator = 1;
 
-                        }
-                        $one_third_of_the_size = ($size-$differenciator) / 3;
+                    }
+                    $one_third_of_the_size = ($size-$differenciator) / 3;
 
-                        for($i=0;$i<$one_third_of_the_size;$i++)
-                        {
-                          array_push($features_col_1, $all_features[$i]);
-                        }
+                    for($i=0;$i<$one_third_of_the_size;$i++)
+                    {
+                        array_push($features_col_1, $all_features[$i]);
+                    }
                         
-                        $two_third_of_the_size =$one_third_of_the_size*2;
+                    $two_third_of_the_size =$one_third_of_the_size*2;
 
-                        for($j=$one_third_of_the_size;$j<$two_third_of_the_size;$j++)
-                        {
-                          array_push($features_col_2, $all_features[$j]);
-                        }
-                        for($j=$two_third_of_the_size;$j<($size-$differenciator);$j++)
-                        {
-                          array_push($features_col_3, $all_features[$j]);
-                        }
-                        if($differenciator > 0)
-                        {
-                          array_push($features_col_1, $all_features[$size-1]);
-                        }
-                      }
-                      else if ($size == 2)
-                      {
+                    for($j=$one_third_of_the_size;$j<$two_third_of_the_size;$j++)
+                    {
+                        array_push($features_col_2, $all_features[$j]);
+                    }
+                    for($j=$two_third_of_the_size;$j<($size-$differenciator);$j++)
+                    {
+                        array_push($features_col_3, $all_features[$j]);
+                    }
+                    if($differenciator > 0) {
+                        array_push($features_col_1, $all_features[$size-1]);
+                    }
+                }
+                      else if ($size == 2) {
                         array_push($features_col_1, $all_features[0]);
                         array_push($features_col_2, $all_features[1]);
-                      }
-                      else if ($size == 1)
-                      {
-                        array_push($features_col_1, $all_features[0]);
-                      }
-                      ?>
+}
+                        else if ($size == 1) {
+                            array_push($features_col_1, $all_features[0]);
+                        }
+                        ?>
                 <h4><?php echo __('Property Features', 'realtor'); ?></h4>
                 <div class="row">
                   <div class="col-sm-4">
                     <ul>
-                      <?php
+                        <?php
                         foreach ($features_col_1 as $sub_key => $sub_value) {
-                          echo '<li><i class="fa fa-caret-right" aria-hidden="true"></i>'.$sub_value.'</li>';
+                            echo '<li><i class="fa fa-caret-right" aria-hidden="true"></i>'.$sub_value.'</li>';
                         }
-                      ?>
+                        ?>
                     </ul>
                 </div>
                   <div class="col-sm-4">
                     <ul>
-                      <?php
+                        <?php
                         foreach ($features_col_2 as $sub_key => $sub_value) {
-                          echo '<li><i class="fa fa-caret-right" aria-hidden="true"></i>'.$sub_value.'</li>';
+                            echo '<li><i class="fa fa-caret-right" aria-hidden="true"></i>'.$sub_value.'</li>';
                         }
-                      ?>
+                        ?>
                     </ul>
                 </div>
                   <div class="col-sm-4">
                     <ul>
                         <?php
                         foreach ($features_col_3 as $sub_key => $sub_value) {
-                          echo '<li><i class="fa fa-caret-right" aria-hidden="true"></i>'.$sub_value.'</li>';
+                            echo '<li><i class="fa fa-caret-right" aria-hidden="true"></i>'.$sub_value.'</li>';
                         }
-                      ?>
+                        ?>
                     </ul>
                 </div>
                 </div>
                 
               </div>
-              <?php get_template_part('template-parts/property/floorplan'); ?>
+                <?php get_template_part('template-parts/property/floorplan'); ?>
               <div class="p-box">
                 
                 <h4><?php echo __('Location', 'realtor'); ?></h4>
-                <p><?php echo get_post_meta(get_the_id(),'address')[0]; ?></p>
+                <p><?php echo get_post_meta(get_the_id(), 'address')[0]; ?></p>
                 <div id="single-property-map"></div>
       
               </div>
-              <?php get_template_part("template-parts/agent-details"); ?>
+                <?php get_template_part("template-parts/agent-details"); ?>
               
-                    <?php if ( comments_open()) {
-                      comments_template('/property-reviews.php');
+                    <?php if (comments_open()) {
+                        comments_template('/property-reviews.php');
                     } ?>
                     
               
@@ -339,5 +334,5 @@
     </div>
     <h4 class="hidden">Realtor</h4>
   </article>
-  <?php endwhile; ?>
-  <?php get_footer(); ?>
+    <?php endwhile; ?>
+    <?php get_footer(); ?>
